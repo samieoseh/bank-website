@@ -1,0 +1,11 @@
+[
+  { "path": "/", "label": "Dashboard" },
+  { "path": "/user-management", "label": "User Accounts" },
+  { "path": "/transactions", "label": "Transactions" },
+  { "path": "/loans", "label": "Loans Reports" },
+  { "path": "/settings", "label": "Settings" },
+  { "path": "/notifications", "label": "Notifications" },
+  { "path": "/audit-logs", "label": "Audit Logs" },
+  { "path": "/branch", "label": "Branch" },
+  { "path": "/in-person-transactions", "label": "In-Person Transactions" }
+]
