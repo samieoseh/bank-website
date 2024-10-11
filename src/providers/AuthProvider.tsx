@@ -92,8 +92,6 @@ export default function AuthProvider({
     setWaitAuthCheck(false);
   }, []);
 
-  console.log("in auth provider: ", { authenticated });
-
   return (
     <AuthContext.Provider
       value={{
