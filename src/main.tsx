@@ -10,6 +10,8 @@ import DashboardPage from "./pages/main/dashboard/DashboardPage.tsx";
 import SharedLayout from "./pages/main/shared/SharedLayout.tsx";
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
+import Transactions from "./pages/main/transactions/Transactions.tsx";
+import Loans from "./pages/main/loans/Loans.tsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,14 @@ const router = createBrowserRouter([
       {
         path: "/user-management",
         element: <UserManagementPage />,
+      },
+      {
+        path: "/transactions",
+        element: <Transactions />,
+      },
+      {
+        path: "/loans",
+        element: <Loans />,
       },
     ],
     errorElement: <ErrorPage />,
