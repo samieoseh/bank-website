@@ -32,15 +32,17 @@ export default function AuthProvider({
       setAuthenticated(true);
       setUser(data.user);
     } catch (error) {
-      setError(error.response.data);
-      setAuthenticated(false);
-      remove();
+      if (axios.isAxiosError(error)) {
+        setError(error?.response?.data);
+        setAuthenticated(false);
+        remove();
 
-      console.error("An error occurred: ", { error });
-      if (error.status === 401) {
-        alert("invalid credentials");
-      } else {
-        alert("An error occurred");
+        console.error("An error occurred: ", { error });
+        if (error.status === 401) {
+          alert("invalid credentials");
+        } else {
+          alert("An error occurred");
+        }
       }
     } finally {
       setLoading(false);
