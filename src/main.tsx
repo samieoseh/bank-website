@@ -1,7 +1,42 @@
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import LoginPage from "./pages/auth/LoginPage.tsx";
+import React from "react";
+import ErrorPage from "./pages/error/ErrorPage.tsx";
+import AuthProvider from "./providers/AuthProvider.tsx";
+import UserManagementPage from "./pages/main/user-management/UserManagementPage.tsx";
+import DashboardPage from "./pages/main/dashboard/DashboardPage.tsx";
+import SharedLayout from "./pages/main/shared/SharedLayout.tsx";
+import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
+import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 
-createRoot(document.getElementById('root')!).render(
-    <App />
-)
+const router = createBrowserRouter([
+  {
+    path: "/auth/login",
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/",
+    element: <SharedLayout />,
+    children: [
+      {
+        path: "/",
+        element: <DashboardPage />,
+      },
+      {
+        path: "/user-management",
+        element: <UserManagementPage />,
+      },
+    ],
+    errorElement: <ErrorPage />,
+  },
+]);
+createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  </React.StrictMode>
+);
