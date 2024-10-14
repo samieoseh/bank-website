@@ -22,44 +22,71 @@ import {
 import { Input } from "@/components/ui/input";
 import userSchema from "@/schemas/user-schema";
 import { PhoneInput } from "@/components/ui/phone-input";
+import axios, { isAxiosError } from "axios";
+import { useQuery } from "@tanstack/react-query";
+import useUserFetch from "../hooks/useUserFetch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RoleType } from "@/types/role";
+import { AccountType } from "@/types/account-type";
 
 export default function UserAddForm() {
+  const { getRoles, getAccountTypes } = useUserFetch();
+
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      username: "",
-      password: "",
       email: "",
       phoneNumber: "",
       fullName: "",
       address: "",
-      accountNumber: "",
-      balance: 0.0,
-      active: true,
-      lastLoginAt: null,
-      createdAt: Date.now(),
-      profilePictureUrl: null,
-      phoneNumberVerified: false,
-      twoFactorAuthEnabled: false,
-      failedLoginAttempts: 0,
-      accountLockedUntil: null,
-      currencyPreference: "NGN",
-      transactionPin: "",
-      userRole: {
-        id: "",
-      },
-      accountType: {
-        id: "",
-      },
+      userRole: "",
+      accountType: "",
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof userSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const { data: roles } = useQuery<RoleType[]>({
+    queryKey: ["userRoles"],
+    queryFn: getRoles,
+  });
+
+  const { data: accountTypes } = useQuery<AccountType[]>({
+    queryKey: ["accountTypes"],
+    queryFn: getAccountTypes,
+  });
+
+  async function onSubmit(values: z.infer<typeof userSchema>) {
+    // send token
+    try {
+      await axios.post("/api/admin/create-user", {
+        ...values,
+        accountNumber: values.phoneNumber.slice(4),
+        emailVerified: false,
+        phoneNumberVerified: false,
+        balance: 0.0,
+        accountType: {
+          id: values.accountType,
+        },
+        userRole: {
+          id: values.userRole,
+        },
+        active: true,
+      });
+
+      alert("User created successfully");
+    } catch (error) {
+      if (isAxiosError(error)) {
+        // do some stuff
+        console.error(error);
+      }
+    }
   }
+
   return (
     <div>
       <Sheet>
@@ -69,7 +96,7 @@ export default function UserAddForm() {
             Add New User
           </Button>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className="w-[940px]">
           <SheetHeader>
             <SheetTitle>Add a new profile</SheetTitle>
             <SheetDescription className="text-[#111]">
@@ -137,6 +164,64 @@ export default function UserAddForm() {
                       <FormControl>
                         <Input placeholder="Address" {...field} />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="userRole"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>User Role</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a user role" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {roles?.map((role) => (
+                            <SelectItem value={role.id}>
+                              {role.roleName}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="accountType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Account Type</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select an account type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {accountTypes?.map((accountType) => (
+                            <SelectItem value={accountType.id}>
+                              {accountType.typeName}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
                       <FormMessage />
                     </FormItem>
                   )}

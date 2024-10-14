@@ -72,7 +72,6 @@ export default function AuthProvider({
   };
 
   useEffect(() => {
-    console.log("running useEffect in auth provider");
     // set the axios to point to the correct backend url
 
     if (import.meta.env.VITE_NODE_ENV === "development") {

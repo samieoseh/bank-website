@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import links from "./nav-links.json";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navigation() {
-  const [activeUrl, setActiveUrl] = useState("/user-management");
+  const location = useLocation();
+  const [activeUrl, setActiveUrl] = useState(location.pathname);
 
   const handleLinkClick = (url: string) => {
     setActiveUrl(url);

@@ -12,13 +12,10 @@ export default function withAuth<P>(
 ): React.FC<HOCProps<P>> {
   const AuthProtectedPage: React.FC<HOCProps<P>> = (props: HOCProps<P>) => {
     const { authenticated, waitAuthCheck } = useAuth() as AuthContextType;
-    console.log({ authenticated, waitAuthCheck });
 
     if (waitAuthCheck) {
-      console.log("waiting for auth check");
       return <div>Loading...</div>;
     } else if (!waitAuthCheck && !authenticated) {
-      console.log("not authenticated");
       return <Navigate to="/auth/login" />;
     }
 

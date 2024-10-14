@@ -1,0 +1,77 @@
+{
+  "dashboard-summary": 
+    { "totalRegisteredUsers": 100, "totalActiveAccounts": 48, "recentTransactions": 209, "pendingApproval": 4, "percentageIncreaseInTotalRegisteredUsers": 0.5, "percentageIncreaseInTotalActiveAccounts": 0.2, "percentageIncreaseInRecentTransactions": 0.3, "percentageIncreaseInPendingApproval": 0.1 },
+    "recent-activities": [
+  {
+    "id": 2,
+    "fullName": "Jane Doe",
+    "actionType": "logout",
+    "actionTime": "2021-09-01T12:15:00Z",
+    "description": "User logged out successfully"
+  },
+  {
+    "id": 3,
+    "fullName": "Alice Smith",
+    "actionType": "create_post",
+    "actionTime": "2021-09-01T12:30:00Z",
+    "description": "User created a new post titled 'My First Post'"
+  },
+  {
+    "id": 4,
+    "fullName": "Bob Johnson",
+    "actionType": "comment",
+    "actionTime": "2021-09-01T12:45:00Z",
+    "description": "User commented on the post 'My First Post'"
+  },
+  {
+    "id": 5,
+    "fullName": "Charlie Brown",
+    "actionType": "like_post",
+    "actionTime": "2021-09-01T12:50:00Z",
+    "description": "User liked the post 'My First Post'"
+  },
+  {
+    "id": 6,
+    "fullName": "David White",
+    "actionType": "edit_profile",
+    "actionTime": "2021-09-01T13:00:00Z",
+    "description": "User updated their profile picture"
+  },
+  {
+    "id": 7,
+    "fullName": "Emily Davis",
+    "actionType": "change_password",
+    "actionTime": "2021-09-01T13:15:00Z",
+    "description": "User changed their password successfully"
+  },
+  {
+    "id": 8,
+    "fullName": "Frank Wilson",
+    "actionType": "send_message",
+    "actionTime": "2021-09-01T13:30:00Z",
+    "description": "User sent a message to johndoe"
+  },
+  {
+    "id": 9,
+    "fullName": "Grace Lee",
+    "actionType": "join_group",
+    "actionTime": "2021-09-01T13:45:00Z",
+    "description": "User joined the group 'Travel Enthusiasts'"
+  },
+  {
+    "id": 10,
+    "fullName": "Henry Harris",
+    "actionType": "delete_post",
+    "actionTime": "2021-09-01T14:00:00Z",
+    "description": "User deleted their post 'Old Memories'"
+  },
+  {
+    "id": 11,
+    "fullName": "Isabella Martinez",
+    "actionType": "upload_file",
+    "actionTime": "2021-09-01T14:15:00Z",
+    "description": "User uploaded a file 'Vacation Photos'"
+  }
+]
+
+}

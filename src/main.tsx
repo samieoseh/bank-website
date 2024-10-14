@@ -12,6 +12,8 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 import Transactions from "./pages/main/transactions/Transactions.tsx";
 import Loans from "./pages/main/loans/Loans.tsx";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -43,10 +45,16 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
 ]);
+
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   </React.StrictMode>
 );

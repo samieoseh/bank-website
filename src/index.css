@@ -64,3 +64,6 @@
     @apply bg-background text-foreground;
   }
 }
+.ag-checkbox-input-wrapper::after {
+  color: green !important;
+}
