@@ -14,6 +14,7 @@ import Transactions from "./pages/main/transactions/Transactions.tsx";
 import Loans from "./pages/main/loans/Loans.tsx";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import InPersonTransactions from "./pages/main/in-person-transactions/InPersonTransactions.tsx";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/loans",
         element: <Loans />,
+      },
+      {
+        path: "/in-person-transactions",
+        element: <InPersonTransactions />,
       },
     ],
     errorElement: <ErrorPage />,

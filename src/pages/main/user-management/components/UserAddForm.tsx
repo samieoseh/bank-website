@@ -93,7 +93,7 @@ export default function UserAddForm() {
         <SheetTrigger asChild>
           <Button className="flex items-center gap-2">
             <LucideUser height={20} width={20} />
-            Add New User
+            Add new user
           </Button>
         </SheetTrigger>
         <SheetContent className="w-[940px]">

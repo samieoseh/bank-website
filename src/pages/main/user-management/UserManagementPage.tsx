@@ -5,7 +5,6 @@ import { useState } from "react";
 import UserAddForm from "./components/UserAddForm";
 import { useQuery } from "@tanstack/react-query";
 import useUserFetch from "./hooks/useUserFetch";
-import { useLocation } from "react-router-dom";
 
 function UserManagementPage() {
   const [searchTerm, setSearchTerm] = useState("");
