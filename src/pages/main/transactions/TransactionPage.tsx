@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import withAuth from "@/withAuth";
-import { LucideDollarSign } from "lucide-react";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -32,12 +31,33 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import DebouncedInput from "@/components/ui/debounced-input";
-import { AccountFormField } from "./components/AccountFormField";
+import axios, { isAxiosError } from "axios";
+import toast from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import useTransactionFetch from "./hooks/useTransactionFetch";
+import TransactionTable from "../transactions/components/TransactionTable";
 
-function InPersonTransactions() {
+interface UserData {
+  fullName: string;
+  id: string;
+  username: string;
+}
+
+function TransactionPage() {
+  const { getTransactions } = useTransactionFetch();
+  const [senderUserData, setSenderUserData] = useState<UserData | null>(null);
+  const [recieverUserData, setRecieverUserData] = useState<UserData | null>(
+    null
+  );
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["transactions"],
+    queryFn: getTransactions,
+  });
+
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: { target: { value: SetStateAction<string> } }) => {
     setSearchTerm(e.target.value);
   };
 
@@ -47,22 +67,48 @@ function InPersonTransactions() {
       amount: 0,
       description: "",
       transactionType: "",
-      transactionDate: "",
       sender: "",
-      receiver: "",
+      reciever: "",
     },
   });
 
+  const transactionType = form.watch("transactionType");
+
   const transactionTypes = ["DEPOSIT", "WITHDRAWAL", "TRANSFER"];
+  console.log({
+    values: form.getValues(),
+    isValid: form.formState.isValid,
+    errors: form.formState.errors,
+  });
 
   async function onSubmit(values: z.infer<typeof transactionSchema>) {
-    console.log({ values });
+    try {
+      console.log({ values });
+      await axios.post("/api/transactions", values);
+      toast.success("Transaction completed successfully", {
+        position: "top-center",
+      });
+      form.reset(form.formState.defaultValues);
+      setSenderUserData(null);
+      setRecieverUserData(null);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.error(error);
+        toast.error(error.response?.data, {
+          position: "top-center",
+        });
+      }
+    }
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">In Person Transaction</h1>
+        <h1 className="text-2xl font-bold">Transaction</h1>
         <div className="flex items-center gap-2">
           <Input
             type="text"
@@ -75,7 +121,6 @@ function InPersonTransactions() {
           <Dialog>
             <DialogTrigger asChild>
               <Button className="flex items-center gap-2">
-                <LucideDollarSign height={20} width={20} />
                 Add new transaction
               </Button>
             </DialogTrigger>
@@ -97,59 +142,69 @@ function InPersonTransactions() {
                       <FormField
                         control={form.control}
                         name="transactionType"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Transaction Type</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
+                        render={({ field }) => {
+                          return (
+                            <FormItem>
+                              <FormLabel>Transaction Type</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select a transaction type" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {transactionTypes.map(
+                                    (transactionType: string) => (
+                                      <SelectItem value={transactionType}>
+                                        {transactionType}
+                                      </SelectItem>
+                                    )
+                                  )}
+                                </SelectContent>
+                              </Select>
+
+                              <FormMessage />
+                            </FormItem>
+                          );
+                        }}
+                      />
+
+                      {(transactionType === "TRANSFER" ||
+                        transactionType === "") && (
+                        <FormField
+                          control={form.control}
+                          name="sender"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormLabel htmlFor="sender">Sender</FormLabel>
                               <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a transaction type" />
-                                </SelectTrigger>
+                                <DebouncedInput
+                                  placeholder="Account Number"
+                                  setUserData={setSenderUserData}
+                                  userData={senderUserData}
+                                  {...field}
+                                />
                               </FormControl>
-                              <SelectContent>
-                                {transactionTypes.map(
-                                  (transactionType: string) => (
-                                    <SelectItem value={transactionType}>
-                                      {transactionType}
-                                    </SelectItem>
-                                  )
-                                )}
-                              </SelectContent>
-                            </Select>
-
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      )}
 
                       <FormField
                         control={form.control}
-                        name="sender"
+                        name="reciever"
                         render={({ field }) => (
                           <FormItem className="flex-1">
-                            <FormLabel htmlFor="sender">Sender</FormLabel>
+                            <FormLabel htmlFor="reciever">Reciever</FormLabel>
                             <FormControl>
                               <DebouncedInput
                                 placeholder="Account Number"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="receiver"
-                        render={({ field }) => (
-                          <FormItem className="flex-1">
-                            <FormLabel htmlFor="receiver">Reciever</FormLabel>
-                            <FormControl>
-                              <DebouncedInput
-                                placeholder="Account Number"
+                                setUserData={setRecieverUserData}
+                                userData={recieverUserData}
                                 {...field}
                               />
                             </FormControl>
@@ -202,10 +257,13 @@ function InPersonTransactions() {
           </Dialog>
         </div>
       </div>
+      <div className="py-8">
+        <TransactionTable data={data} />
+      </div>
     </div>
   );
 }
 
-const InPersonTransactionsWithAuth = withAuth(InPersonTransactions);
+const TransactionsWithAuth = withAuth(TransactionPage);
 
-export default InPersonTransactionsWithAuth;
+export default TransactionsWithAuth;

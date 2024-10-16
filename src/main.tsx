@@ -10,11 +10,11 @@ import DashboardPage from "./pages/main/dashboard/DashboardPage.tsx";
 import SharedLayout from "./pages/main/shared/SharedLayout.tsx";
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
-import Transactions from "./pages/main/transactions/Transactions.tsx";
 import Loans from "./pages/main/loans/Loans.tsx";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import InPersonTransactions from "./pages/main/in-person-transactions/InPersonTransactions.tsx";
+import { Toaster } from "react-hot-toast";
+import TransactionPage from "./pages/main/transactions/TransactionPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -36,15 +36,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/transactions",
-        element: <Transactions />,
+        element: <TransactionPage />,
       },
       {
         path: "/loans",
         element: <Loans />,
-      },
-      {
-        path: "/in-person-transactions",
-        element: <InPersonTransactions />,
       },
     ],
     errorElement: <ErrorPage />,
@@ -58,6 +54,7 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RouterProvider router={router} />
+        <Toaster />
       </AuthProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>

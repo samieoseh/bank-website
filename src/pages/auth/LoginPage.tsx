@@ -35,7 +35,7 @@ export default function LoginPage() {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       await login(data.username, data.password);
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       console.error("An error occurred: ", { error });
     }

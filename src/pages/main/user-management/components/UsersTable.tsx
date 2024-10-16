@@ -12,17 +12,17 @@ export default function UsersTable({ data }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [colDefs] = useState<any>([
     { field: "fullName", pinned: "left" },
-    { field: "accountNumber", pinned: "left" },
+    { field: "accountNumber" },
     { field: "phoneNumber" },
     { field: "email" },
     { field: "username" },
     { field: "address" },
-    { field: "balance" },
-    { field: "active", pinned: "left" },
+    { field: "balance", cellDataType: "number" },
+    { field: "active" },
     { field: "emailVerified" },
     { field: "phoneNumberVerified" },
-    { field: "createdAt" },
-    { field: "lastLoginAt" },
+    { field: "createdAt", cellDataType: "time" },
+    { field: "lastLoginAt", cellDataType: "time" },
     { field: "accountLockedUntil" },
   ]);
 
@@ -39,7 +39,16 @@ export default function UsersTable({ data }) {
       style={{ height: 500 }} // the Data Grid will fill the size of the parent container
     >
       <AgGridReact
-        rowData={rowData}
+        rowData={rowData.map(
+          (row: {
+            createdAt: string | number | Date;
+            lastLoginAt: string | number | Date;
+          }) => ({
+            ...row,
+            createdAt: new Date(row.createdAt),
+            lastLoginAt: new Date(row.lastLoginAt),
+          })
+        )}
         columnDefs={colDefs}
         autoSizeStrategy={autoSizeStrategy}
       />

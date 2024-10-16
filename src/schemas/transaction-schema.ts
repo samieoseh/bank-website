@@ -1,12 +1,23 @@
 import { z } from "zod";
 
 const transactionSchema = z.object({
-    amount: z.coerce.number().positive("Amount must be positive"),
+    amount: z.coerce.number({ message: "Amount must be a number" }).positive("Amount must be positive"),
     description: z.string().optional(),
-    transactionType: z.string(),
-    transactionDate: z.string(),
-    sender: z.string().length(10, "Sender account number must be 10 characters"),
-    receiver: z.string().length(10, "Reciever account number must be 10 characters")
-})
+    transactionType: z.enum(["DEPOSIT", "WITHDRAWAL", "TRANSFER", ""]),
+    sender: z.string().optional(),
+    reciever: z.string().optional()
+}).refine((data) => {
+    if (["TRANSFER", ""].includes(data.transactionType)) {
+        return !!data.sender;
+    }
+    if (["WITHDRAWAL"].includes(data.transactionType)) {
+        return !!data.reciever;
+    }
+    console.log({data})
+    return true;
+}, {
+    message: "Sender is required",
+    path: ["sender"]
+});
 
 export default transactionSchema;

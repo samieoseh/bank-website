@@ -1,6 +1,7 @@
 import AuthContext from "@/context/AuthContext";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export default function AuthProvider({
   children,
@@ -74,23 +75,33 @@ export default function AuthProvider({
   useEffect(() => {
     // set the axios to point to the correct backend url
 
-    if (import.meta.env.VITE_NODE_ENV === "development") {
-      axios.defaults.baseURL = import.meta.env.VITE_DEV_BACKEND_URL;
-    } else {
-      axios.defaults.baseURL = import.meta.env.VITE_PROD_BACKEND_URL;
+    async function validateTokenAndGetUserIfValid() {
+      if (import.meta.env.VITE_NODE_ENV === "development") {
+        axios.defaults.baseURL = import.meta.env.VITE_DEV_BACKEND_URL;
+      } else {
+        axios.defaults.baseURL = import.meta.env.VITE_PROD_BACKEND_URL;
+      }
+
+      // get value from local storage
+      const accessToken = getValueFromKey(
+        import.meta.env.VITE_JWT_ACCESS_TOKEN || ""
+      );
+
+      if (accessToken) {
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+        setAuthenticated(true);
+        const userId = jwtDecode(accessToken);
+        console.log({ userId });
+        const response = await axios.get(`/api/users/${userId.sub}`);
+        const data = response.data;
+        setUser(data);
+      }
+
+      setWaitAuthCheck(false);
     }
-
-    // get value from local storage
-    const accessToken = getValueFromKey(
-      import.meta.env.VITE_JWT_ACCESS_TOKEN || ""
-    );
-
-    if (accessToken) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      setAuthenticated(true);
-    }
-
-    setWaitAuthCheck(false);
+    validateTokenAndGetUserIfValid();
   }, []);
 
   return (

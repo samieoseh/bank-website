@@ -2,10 +2,17 @@ import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import links from "./nav-links.json";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import useAuth from "@/hooks/useAuth";
+import { AuthContextType } from "@/types/user";
 
 export default function Navigation() {
+  const { user } = useAuth() as AuthContextType;
   const location = useLocation();
   const [activeUrl, setActiveUrl] = useState(location.pathname);
+
+  const userSplit = user?.fullName.split(" ");
+  const firstName = userSplit && userSplit[0];
+  const lastName = userSplit && userSplit[1];
 
   const handleLinkClick = (url: string) => {
     setActiveUrl(url);
@@ -16,9 +23,12 @@ export default function Navigation() {
       <div className="px-4 flex space-x-4 items-center">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>
+            {firstName?.charAt(0)}
+            {lastName?.charAt(0)}
+          </AvatarFallback>
         </Avatar>
-        <p className="font-bold text-sm">JOHN DOE</p>
+        <p className="font-bold text-sm">{user?.fullName.toUpperCase()}</p>
       </div>
       <ul className="space-y-2">
         {links.map(({ path, label }) => (

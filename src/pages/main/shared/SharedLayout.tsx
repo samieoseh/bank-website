@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navigation from "./Navigation";
 
 export default function SharedLayout() {
+
   return (
     <div className="bg-[#f5f5f5] min-h-screen">
       <div className="flex overflow-x-hidden">

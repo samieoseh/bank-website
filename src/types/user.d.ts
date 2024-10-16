@@ -13,4 +13,5 @@ export interface AuthContextType {
 export interface UserType {
   username: string;
   password: string;
+  fullName: string;
 }
