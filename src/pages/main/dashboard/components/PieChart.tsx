@@ -1,8 +1,9 @@
+import { ApexOptions } from "apexcharts";
 import { useState } from "react";
 import Chart from "react-apexcharts";
 
 export default function PieChart() {
-  const [options] = useState({
+  const [options] = useState<ApexOptions>({
     chart: {
       id: "basic-pie",
       type: "pie",

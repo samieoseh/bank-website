@@ -1,7 +1,7 @@
 import withAuth from "@/withAuth";
 import UsersTable from "./components/UsersTable";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import UserAddForm from "./components/UserAddForm";
 import { useQuery } from "@tanstack/react-query";
 import useUserFetch from "./hooks/useUserFetch";
@@ -11,7 +11,7 @@ function UserManagementPage() {
 
   const { getUsers } = useUserFetch();
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: { target: { value: SetStateAction<string> } }) => {
     setSearchTerm(e.target.value);
   };
 

@@ -5,8 +5,13 @@ import {
 } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { CircleAlert, LucideCheckCircle } from "lucide-react";
+import { TransactionType } from "@/types/transaction-type";
 
-export default function TransactionTable({ data }) {
+export default function TransactionTable({
+  data,
+}: {
+  data: TransactionType[];
+}) {
   const [rowData] = useState(data);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

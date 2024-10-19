@@ -14,4 +14,8 @@ export interface UserType {
   username: string;
   password: string;
   fullName: string;
+  accountNumber: string;
+  createdAt: string | number | Date;
+  lastLoginAt: string | number | Date;
+
 }

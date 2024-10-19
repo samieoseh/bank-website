@@ -30,7 +30,9 @@ const AccountFormField = React.forwardRef<
   HTMLInputElement,
   AccountFormFieldProps
 >(({ className, setValue, label, ...props }, ref) => {
-  const handleChange = (e) => {
+  const handleChange = (e: {
+    target: { value: string | number | undefined };
+  }) => {
     console.log("target: ", e.target.value);
     setValue(label, e.target.value);
   };

@@ -1,3 +1,4 @@
+import { UserType } from "@/types/user";
 import {
   SizeColumnsToContentStrategy,
   SizeColumnsToFitGridStrategy,
@@ -5,7 +6,7 @@ import {
 import { AgGridReact } from "ag-grid-react";
 import { useState } from "react";
 
-export default function UsersTable({ data }) {
+export default function UsersTable({ data }: { data: UserType[] }) {
   // Row Data: The data to be displayed.
   const [rowData] = useState(data);
 

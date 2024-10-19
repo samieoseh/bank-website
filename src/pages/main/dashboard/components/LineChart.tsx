@@ -1,8 +1,9 @@
+import { ApexOptions } from "apexcharts";
 import { useState } from "react";
 import Chart from "react-apexcharts";
 
 export default function AreaChart() {
-  const [options] = useState({
+  const [options] = useState<ApexOptions>({
     chart: {
       id: "basic-area",
       type: "area",
@@ -19,7 +20,6 @@ export default function AreaChart() {
         style: {
           fontSize: "12px", // Font size for x-axis labels
           fontWeight: "normal", // Font weight for x-axis labels
-          color: "#555", // Color for x-axis labels
         },
       },
       axisTicks: {
@@ -33,7 +33,6 @@ export default function AreaChart() {
         style: {
           fontSize: "12px", // Font size for y-axis labels
           fontWeight: "normal", // Font weight for y-axis labels
-          color: "#555", // Color for y-axis labels
         },
       },
       axisBorder: {
